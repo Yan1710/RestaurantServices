@@ -1,5 +1,6 @@
 package com.example.Restaurante.controller;
 
+import com.example.Restaurante.dto.JwtResponse;
 import com.example.Restaurante.dto.LoginRequest;
 import com.example.Restaurante.entity.Usuario;
 import com.example.Restaurante.service.UsuarioService;
@@ -22,7 +23,7 @@ public class UsuarioController {
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
         try {
-            String token = usuarioService.iniciarSesion( loginRequest.getEmail(), loginRequest.getPassword());
+            JwtResponse token = usuarioService.iniciarSesion( loginRequest.getEmail(), loginRequest.getPassword());
             return ResponseEntity.ok().body(token);
         } catch (RuntimeException e) {
             return ResponseEntity.status(401).body(e.getMessage());

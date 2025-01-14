@@ -1,6 +1,7 @@
 package com.example.Restaurante.service;
 
 import com.example.Restaurante.Utils.RolEnum;
+import com.example.Restaurante.dto.JwtResponse;
 import com.example.Restaurante.entity.Usuario;
 import com.example.Restaurante.repository.UsuarioRepository;
 import io.jsonwebtoken.Jwts;
@@ -39,14 +40,15 @@ public class UsuarioService {
         return "creado con exito";
     }
 
-    public String iniciarSesion(String email, String password) {
+    public JwtResponse iniciarSesion(String email, String password) {
         Optional<Usuario> usuarioOpt = repository.findByEmail(email);
 
         if (usuarioOpt.isPresent()) {
             Usuario usuario = usuarioOpt.get();
             if (passwordEncoder.matches(password, usuario.getPassword())) {
+                String token = generarTokenJWT(usuario);
                 // Generar JWT
-                return generarTokenJWT(usuario);
+                return new JwtResponse(token);
             } else {
                 throw new RuntimeException("Contraseña incorrecta");
             }
