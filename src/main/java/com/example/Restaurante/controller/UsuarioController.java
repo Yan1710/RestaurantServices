@@ -15,6 +15,7 @@ public class UsuarioController {
 
     @PostMapping("/registro")
     public String crearUsuario(@RequestBody Usuario usuario) {
+        
         return usuarioService.crearUsuario(usuario.getNombre(), usuario.getEmail(), usuario.getPassword());
     }
 
