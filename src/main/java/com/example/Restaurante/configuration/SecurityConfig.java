@@ -16,7 +16,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 public class SecurityConfig {
 
-    @Bean
+    // DEPRECATED
+   /* @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf().disable()
                 .authorizeRequests()
@@ -30,6 +31,23 @@ public class SecurityConfig {
                 .addFilterBefore(new JwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class); // Filtro JWT;
 
         return http.build();
+    }*/
+
+    //TODO NEW
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        return http
+                .csrf(csrf -> csrf.disable())
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/api/usuarios/login", "/api/usuarios/registro").permitAll()
+                        .requestMatchers("/api/Domicilio/list", "/api/Domicilio/encamino", "/api/Domicilio/entregado")
+                        .hasAnyRole(RolEnum.DOMICILIARIO.getValor(), RolEnum.ADMINISTRADOR.getValor())
+                        .requestMatchers("/api/Restaurante/pedidos", "/api/Restaurante/saveitems", "/api/Restaurante/savepedido")
+                        .hasAnyRole(RolEnum.RESTAURANTE.getValor(), RolEnum.ADMINISTRADOR.getValor())
+                        .anyRequest().authenticated()
+                )
+                .addFilterBefore(new JwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
+                .build();
     }
 
     @Bean
