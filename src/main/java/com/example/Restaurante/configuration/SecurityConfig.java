@@ -39,6 +39,14 @@ public class SecurityConfig {
         return http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
+                        .requestMatchers(
+                                "/swagger-ui/**",
+                                "/swagger-ui.html",
+                                "/v3/api-docs/**",
+                                "/v3/api-docs.yaml",
+                                "/webjars/**",
+                                "/swagger-resources/**"
+                        ).permitAll()
                         .requestMatchers("/api/usuarios/login", "/api/usuarios/registro").permitAll()
                         .requestMatchers("/api/Domicilio/list", "/api/Domicilio/encamino", "/api/Domicilio/entregado")
                         .hasAnyRole(RolEnum.DOMICILIARIO.getValor(), RolEnum.ADMINISTRADOR.getValor())
